@@ -1,0 +1,42 @@
+import pandas as pd
+
+base_livros = pd.DataFrame({
+    'ID': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    'Título do Livro': ['Harry Potter e a Pedra Filosofal', 'O Código da Vinci', 'A Cabana', 'A Culpa é das Estrelas', 'O Senhor dos Anéis', 'O Pequeno Príncipe', '1984', 'O Alquimista', 'A Menina que Roubava Livros', 'O Diário de Anne Frank', 'O Príncipe', 'O Nome do Vento', 'O Iluminado', 'A Revolução dos Bichos', 'Dom Casmurro'],
+    'Autor': ['J.K. Rowling', 'Dan Brown', 'William P. Young', 'John Green', 'J.R.R. Tolkien', 'Antoine de Saint-Exupéry', 'George Orwell', 'Paulo Coelho', 'Markus Zusak', 'Anne Frank', 'Maquiavel', 'Patrick Rothfuss', 'Stephen King', 'George Orwell', 'Machado de Assis'],
+    'Editora': ['Rocco', 'Sextante', 'Arqueiro', 'Intrínseca', 'Martins Fontes', 'Agir', 'Companhia das Letras', 'Planeta', 'Intrínseca', 'Record', 'Martin Claret', 'Arqueiro', 'Suma de Letras', 'Companhia das Letras', 'Companhia das Letras'],
+    'Preço de Venda': ['R$ 39,90', 'R$ 49,90', 'R$ 29,90', 'R$ 39,90', 'R$ 89,90', 'R$ 19,90', 'R$ 34,90', 'R$ 29,90', 'R$ 44,90', 'R$ 29,90', 'R$ 19,90', 'R$ 59,90', 'R$ 49,90', 'R$ 24,90', 'R$ 29,90'],
+    'Data de Venda': ['2022-01-05', '2022-02-14', '2022-03-07', '2022-02-28', '2022-03-15', '2022-01-20', '2022-02-02', '2022-01-12', '2022-03-10', '2022-02-17', '2022-03-02', '2022-01-28', '2022-02-11', '2022-03-04', '2022-01-14'],
+    'Número de Unidades Vendidas': [15, 10, 5, 12, 8, 20, 6, 9, 7, 3, 11, 14, 8, 12, 6]
+     })
+
+
+#Os primeiros 5 registros
+print(base_livros.head(5))
+
+
+#Sumarizando vendas por editora
+print( base_livros[['Editora','Preço de Venda']].groupby(['Editora']).count() )
+print( base_livros[['Editora','Preço de Venda']].groupby(['Editora']).sum() )
+#Obs: com este método, é possível apenas fazer uma operação por vez
+
+
+#Assim nós faremos a contagem de registros e sumarizando as vendas em uma tabela só
+tabela_sumarizada = base_livros.groupby('Editora')['Preço de Venda'].agg(Total_Vendido=('sum'), Qtd_Vendida=('count') )
+tabela_sumarizada = tabela_sumarizada.reset_index()
+print(tabela_sumarizada)
+
+
+
+resultados = base_livros.groupby('Editora').agg(
+     {'Número de Unidades Vendidas': 'sum',
+     'Título do Livro': 'count',
+     'Autor': 'nunique'} #aqui estamos contando quantos vendedores distintos existem
+)
+
+resultados = resultados.rename(columns={
+     'Número de Unidades Vendidas':'Total_Vendido'
+    ,'Título do Livro':'Qtd_Vendida'
+    ,'Autor':'Qtd_Autores'
+})
+print(resultados)
