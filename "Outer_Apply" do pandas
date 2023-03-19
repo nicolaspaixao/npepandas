@@ -1,0 +1,29 @@
+import pandas as pd
+
+# Criamos um DataFrame com as informações de acionamento
+dados_acionamento = {'id_cliente': [1, 2, 3, 4, 4],
+                     'data_acionamento': ['2022-01-01', '2022-01-02', '2022-01-02', '2022-01-04', '2022-01-05'],
+                     'outras_informacoes': ['informacao1', 'informacao2', 'informacao3', 'informacao4', 'informacao5']}
+
+df_acionamento = pd.DataFrame(dados_acionamento)
+df_acionamento['data_acionamento_index'] = pd.to_datetime(df_acionamento['data_acionamento'])
+df_acionamento = df_acionamento.set_index('data_acionamento_index')
+
+
+
+# Criamos um DataFrame com as informações de foto de contrato
+dados_foto = {'id_cliente': [1, 2, 3, 4, 4],
+             'data_foto': ['2021-12-30', '2021-12-31', '2022-01-02', '2022-01-03', '2022-01-04'],
+             'atraso': [0, 1, 2, 3, 4],
+             'descricao': ['descricao1', 'descricao2', 'descricao3', 'descricao4', 'descricao5']}
+             
+df_foto = pd.DataFrame(dados_foto)
+df_foto['data_foto_index'] = pd.to_datetime(df_foto['data_foto'])
+df_foto = df_foto.set_index('data_foto_index')
+
+
+
+# Utilizamos a função merge_asof para juntar os dois DataFrames
+#Obs: o cruzamento 
+df_resultado = pd.merge_asof(df_acionamento, df_foto, left_on='data_acionamento_index', right_on='data_foto_index', by='id_cliente', direction='nearest')
+print(df_resultado)
