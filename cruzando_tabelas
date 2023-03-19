@@ -1,0 +1,26 @@
+import pandas as pd
+
+# Tabela de vendas
+vendas = pd.DataFrame({
+    'ID_Produto': [1, 2, 3, 4, 5],
+    'Quantidade': [10, 5, 3, 2, 7],
+    'Preço Unitário': [25.00, 50.00, 80.00, 20.00, 30.00]
+})
+
+# Tabela de descrição dos produtos
+produtos = pd.DataFrame({
+    'ID_Produto': [1, 2, 3, 4, 6],
+    'Produto': ['Camiseta', 'Calça', 'Sapato', 'Camiseta', 'Blusa'],
+    'Marca': ['Nike', 'Levi\'s', 'Adidas', 'Hering', 'Renner'],
+    'Cor': ['Azul', 'Preto', 'Branco', 'Vermelho', 'Rosa']
+})
+
+#Para este exemplo, ele ignorou os valores NaN e também ele precisa das duas colunas com o mesmo nome
+df = pd.merge(vendas, produtos, on='ID_Produto')
+print(df)
+
+
+#Para este exemplo, ele trazer também os valores NaN do cruzamento, porém precisamos especificar o HOW
+#No "how, precisamos falar de qual tabela estamos lendo: tabela da esquerda, da direita ou até mesmo "outer"
+cruzando_bases = pd.merge(vendas, produtos, left_on=['ID_Produto'], right_on=['ID_Produto'], how='left')
+print(cruzando_bases)
